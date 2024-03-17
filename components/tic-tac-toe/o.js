@@ -1,5 +1,3 @@
-import { MdOutlineCircle } from 'react-icons/md';
-
-export default function OComponent() {
-    return <div className='font-monoton text-yellow-500'>O</div>;
+export default function OComponent({ colored = true }) {
+    return <div className={`font-monoton ${colored ? 'text-yellow-500' : ''}`}>O</div>;
 }
