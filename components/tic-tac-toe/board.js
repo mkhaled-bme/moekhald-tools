@@ -15,6 +15,17 @@ export default function Board({ mode }) {
     const [oScore, setOScore] = React.useState(0);
     const [tieScore, setTieScore] = React.useState(0);
 
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ];
+
     const handleClick = (i) => {
         if (winner || squares[i]) {
             return;
@@ -58,16 +69,6 @@ export default function Board({ mode }) {
     };
 
     const cpuCounterMove = () => {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
         for (let i = 0; i < lines.length; i++) {
             const [a, b, c] = lines[i];
             if (squares[a] === 'O' && squares[b] === 'O' && squares[c] === null) {
@@ -98,9 +99,6 @@ export default function Board({ mode }) {
         setXIsNext(true);
     };
 
-    const renderSquare = (i) => {
-        return <Square value={squares[i]} onClick={() => handleClick(i)} />;
-    };
     let status;
     if (winner) {
         status = (
@@ -118,16 +116,6 @@ export default function Board({ mode }) {
         );
     }
     const calculateWinner = (squares) => {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
         for (let i = 0; i < lines.length; i++) {
             const [a, b, c] = lines[i];
             if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
@@ -136,8 +124,32 @@ export default function Board({ mode }) {
         }
         return null;
     };
+
+    const getWinningLine = (squares) => {
+        for (let i = 0; i < lines.length; i++) {
+            const [a, b, c] = lines[i];
+            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                return lines[i];
+            }
+        }
+        return null;
+    };
+
+    const winningLine = getWinningLine(squares);
+
+    const renderSquare = (i) => {
+        return (
+            <Square
+                value={squares[i]}
+                onClick={() => handleClick(i)}
+                winner={winningLine && winningLine.includes(i) ? squares[i] : null}
+                isWinningSquare={winningLine && winningLine.includes(i)}
+            />
+        );
+    };
+
     return (
-        <div className='flex flex-col space-y-4 w-full max-w-2xl'>
+        <div className='flex flex-col space-y-4 w-full max-w-xl'>
             <div className='flex w-full justify-between items-center'>
                 <div className='flex space-x-2 font-bold text-4xl w-20'>
                     <XComponent />
@@ -162,7 +174,7 @@ export default function Board({ mode }) {
                 {renderSquare(8)}
             </div>
             <div className='flex justify-between items-center'>
-                <div className='flex flex-col items-center bg-teal-500  p-2'>
+                <div className='flex flex-col items-center bg-teal-500 px-6 py-2'>
                     <div className='text-lg flex space-x-1 items-center'>
                         <XComponent colored={false} />
                         <div className='uppercase'>Score</div>
@@ -173,7 +185,7 @@ export default function Board({ mode }) {
                     <div className='text-lg uppercase'>Ties</div>
                     <div className='text-4xl'>{tieScore}</div>
                 </div>
-                <div className='flex flex-col items-center bg-yellow-500 p-2'>
+                <div className='flex flex-col items-center bg-yellow-500 px-6 py-2'>
                     <div className='text-lg flex space-x-1 items-center'>
                         <OComponent colored={false} />
                         <div className='uppercase'>Score</div>

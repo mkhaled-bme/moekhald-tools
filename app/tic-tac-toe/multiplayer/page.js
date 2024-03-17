@@ -5,11 +5,10 @@ import Board from '@/components/tic-tac-toe/board';
 
 export default function PasswordGeneratorPage() {
     return (
-        <main className='flex min-h-screen flex-col items-center px-8 py-24 sm:p-24 space-y-8'>
-            <h1 className='font-bold'>Tic Tac Toe Game</h1>
+        <main className='flex min-h-screen flex-col items-center p-8 space-y-8'>
             <Board mode={'multiplayer'} />
             <Link href='/tic-tac-toe'>
-                <Button variant='link'>back</Button>
+                <Button variant='link'>Quit</Button>
             </Link>
         </main>
     );
